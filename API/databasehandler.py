@@ -12,7 +12,7 @@ def startup():
         Term_name TEXT NOT NULL,
         Term_levelStart INTEGER NOT NULL,
         Term_levelEnd INTEGER NOT NULL,
-        Term_perspective TEXT CHECK(Term_perspective IN ('Onderwijsontwerp', 'perspective2', 'perspective3')),
+        Term_perspective TEXT CHECK(Term_perspective IN ('Onderwijsontwerp', 'Samenstellingonderbouwing', 'Doelstelling', 'Onderwijsontwerpvolgorde', 'Benodigdheden', 'Aanbod', 'Startperiode')),
         Term_Definition INTEGER,
         FOREIGN KEY (Term_Definition) REFERENCES DEFINITION (Definition_ID)
     );
@@ -29,11 +29,44 @@ def startup():
     ''')
  
  cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Curriculum', 7, 7, 'Onderwijsontwerp');")
- cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Cursusontwerp', 3, 3, 'Onderwijsontwerp');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Cursusontwerp', 4, 4, 'Onderwijsontwerp');")
  cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetsactiviteitontwerp', 2, 2, 'Onderwijsontwerp');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Specialisatie', 7, 7, 'Onderwijsontwerp');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Minorontwerp', 6, 6, 'Onderwijsontwerp');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Microcredentialontwerp', 5, 5, 'Onderwijsontwerp');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Eenheid van leeruitkomstenontwerp', 4, 4, 'Onderwijsontwerp');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetsactiviteitonderdeelontwerp', 1, 1, 'Onderwijsontwerp');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Leerlijn', 4, 7, 'Samenstellingonderbouwing');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Themalijn', 4, 7, 'Samenstellingonderbouwing');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetsmatrijs (in-progress)', 2, 4, 'Samenstellingonderbouwing');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Rubric', 1, 2, 'Samenstellingonderbouwing');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Eindkwalificaties', 7, 7, 'Doelstelling');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Minordoelen', 6, 6, 'Doelstelling');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Cursusdoelen', 4, 4, 'Doelstelling');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetscriteria', 2, 2, 'Doelstelling');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Beoordelingsnorm', 1, 1, 'Doelstelling');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Curriculumcursusprogramma', 7, 7, 'Onderwijsontwerpvolgorde');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Minorcursusprogramma', 6, 6, 'Onderwijsontwerpvolgorde');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Cursusplanning', 4, 4, 'Onderwijsontwerpvolgorde');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetsactiviteitonderdeel-volgorde', 2, 2, 'Onderwijsontwerpvolgorde');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetsmaterialen', 1, 2, 'Benodigdheden');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Opleiding', 7, 7, 'Aanbod');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Minor', 6, 6, 'Aanbod');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Cursus', 4, 4, 'Aanbod');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetsgelegenheid', 2, 2, 'Aanbod');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Collegejaar', 7, 7, 'Startperiode');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Semester', 6, 6, 'Startperiode');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Periode', 3, 4, 'Startperiode');") 
+
 
  cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 2)')
- cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 3)')
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 24)')
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 5)')
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 19)')
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 14)')
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 10)')
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 11)')
+ 
 
  conn.commit()
 
@@ -53,7 +86,6 @@ def get_onderwijsontwerpdata():
 
     # Populate the dictionary with data
     for row in rows:
-        print(row)
         term1_id, term1_name, term1_level_start, term1_level_end, term1_perspective, t1definition, term2_id, term2_name, term2_level_start, term2_level_end, term2_perspective, t2definition, definition_id = row
 
         # If the term has not been encountered, initialize its data
@@ -75,6 +107,5 @@ def get_onderwijsontwerpdata():
 
     # Convert the dictionary to a list of results
     combined_terms = list(terms_dict.values())
-    print(combined_terms)
-
+    
     return combined_terms
