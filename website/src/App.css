@@ -39,7 +39,7 @@
 
 /* Add this to your CSS */
 .table-container {
-  width: 80%;
+  width: 90%;
   overflow-x: auto;
   max-width: 100%;
   margin: 0 auto;
@@ -67,6 +67,6 @@ th {
 }
 
 .table-container {
-  max-height: 700px; /* Fixed height for vertical scroll */
+  max-height: 900px; /* Fixed height for vertical scroll */
   overflow-y: auto; /* Enables vertical scrolling */
 }

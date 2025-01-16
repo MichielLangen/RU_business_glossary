@@ -1,4 +1,13 @@
 import React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 class Onderwijsontwerp extends React.Component {
   constructor(props) {
@@ -36,90 +45,114 @@ class Onderwijsontwerp extends React.Component {
       { length: maxLevel - minLevel + 1 },
       (_, i) => minLevel + i
     ).reverse();
+
+    const rows = [];
+
+    levels.forEach((level) => {
+      const row = { level, cells: {} };
+
+      perspectives.forEach((perspective) => {
+        // Find terms that match this level and perspective
+        const termsAtLevel = data.filter(
+          (term) =>
+            term.Term_perspective === perspective &&
+            term.Term_levelStart <= level &&
+            term.Term_levelEnd >= level
+        );
+
+        if (termsAtLevel.length > 1) {
+          row.cells[perspective] = termsAtLevel.map((term) => term.Term_name);
+        } else if (termsAtLevel.length === 1) {
+          row.cells[perspective] = [termsAtLevel[0].Term_name];
+        } else {
+          row.cells[perspective] = [];
+        }
+      });
+
+      rows.push(row);
+    });
+
     return (
       <div>
+        <h2>Business Glossary v1</h2>
         <div className="table-container">
-          <h2>Business Glossary v1</h2>
-          <table border="1">
-            <thead>
-              <tr>
-                <th>Level</th>
-                {perspectives.map((perspective, index) => (
-                  <th key={index}>{perspective}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {levels.map((level) => (
-                <tr key={level}>
-                  <td>{level}</td>
-                  {perspectives.map((perspective, index) => {
-                    // Find terms that match this level and perspective
-                    const termsAtLevel = data.filter(
-                      (term) =>
-                        term.Term_perspective === perspective &&
-                        term.Term_levelStart <= level &&
-                        term.Term_levelEnd >= level
-                    );
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Level</TableCell>
+                  {perspectives.map((perspective, index) => (
+                    <TableCell key={index}>{perspective}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, rowIndex) => {
+                  const subRows = Math.max(
+                    ...Object.values(row.cells).map((cell) =>
+                      cell ? cell.length : 0
+                    )
+                  );
 
-                    return (
-                      <td key={index}>
-                        {termsAtLevel.length > 0 ? (
-                          termsAtLevel.map((term) => (
-                            <span key={term.Term_ID}>
-                              {term.Term_name}
-                              <br />
-                            </span>
-                          ))
-                        ) : (
-                          <div></div>
+                  return Array.from({ length: subRows }).map(
+                    (_, subRowIndex) => (
+                      <TableRow key={`${rowIndex}-${subRowIndex}`}>
+                        {subRowIndex === 0 && (
+                          <TableCell rowSpan={subRows}>{row.level}</TableCell>
                         )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                        {perspectives.map((perspective, perspectiveIndex) => (
+                          <TableCell
+                            key={`${rowIndex}-${perspectiveIndex}-${subRowIndex}`}
+                          >
+                            {row.cells[perspective][subRowIndex] || ""}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    )
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
         <br />
         <div className="table-container">
-          <table border="1">
-            <thead>
-              <tr>
-                {/* Create table headers dynamically based on the keys */}
-                {headers.map((header, index) => (
-                  <th key={index}>{header}</th>
-                ))}
-                <th>Related Terms</th> {/* Add a column for related terms */}
-              </tr>
-            </thead>
-            <tbody>
-              {/* Map over each row of the data */}
-              {data.map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  {/* Map over each key-value pair in the row */}
-                  {headers.map((header, colIndex) => (
-                    <td key={colIndex}>{row[header]}</td>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {/* Dynamically create headers from `headers` array */}
+                  {headers.map((header, index) => (
+                    <TableCell key={index}>{header}</TableCell>
                   ))}
-                  {/* Render related terms in a new column */}
-                  <td>
-                    {/* Check if related terms exist */}
-                    {row.Related_Terms && row.Related_Terms.length > 0 ? (
-                      <ul>
-                        {/* Map over related terms and display them */}
-                        {row.Related_Terms.map((relatedTerm, index) => (
-                          <li key={index}>{relatedTerm.Term2_Name}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>No related terms</p>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  <TableCell>Related Terms</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {/* Map over the rows of the data */}
+                {data.map((row, rowIndex) => (
+                  <TableRow key={rowIndex}>
+                    {/* Map over each header and render corresponding data */}
+                    {headers.map((header, colIndex) => (
+                      <TableCell key={colIndex}>{row[header]}</TableCell>
+                    ))}
+                    {/* Render related terms in a new column */}
+                    <TableCell>
+                      {row.Related_Terms && row.Related_Terms.length > 0 ? (
+                        <ul>
+                          {row.Related_Terms.map((relatedTerm, index) => (
+                            <li key={index}>{relatedTerm.Term2_Name}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>No related terms</p>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </div>
     );
