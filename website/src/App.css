@@ -70,3 +70,14 @@ th {
   max-height: 900px; /* Fixed height for vertical scroll */
   overflow-y: auto; /* Enables vertical scrolling */
 }
+
+.vl {
+  border-left: 1px solid gray;
+  height: 840px;
+  overflow: hidden;
+}
+
+.rowC {
+  display: flex;
+  flex-direction: row;
+}

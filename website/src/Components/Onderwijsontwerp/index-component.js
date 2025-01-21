@@ -8,8 +8,10 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import { OnderwijsontwerpSjabloon } from "../../Constants/Onderwijsontwerp";
+import { fillTemplate } from "../../Constants/Onderwijsontwerp";
 
-class Onderwijsontwerp extends React.Component {
+class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,6 +48,11 @@ class Onderwijsontwerp extends React.Component {
       (_, i) => minLevel + i
     ).reverse();
 
+    let filledTemplates = data.map((record) => {
+      let templateCopy = JSON.parse(JSON.stringify(OnderwijsontwerpSjabloon)); // Create a fresh copy of the template for each record
+      return fillTemplate(templateCopy, record);
+    });
+
     const rows = [];
 
     levels.forEach((level) => {
@@ -74,7 +81,7 @@ class Onderwijsontwerp extends React.Component {
 
     return (
       <div>
-        <h2>Business Glossary v1</h2>
+        <br />
         <div className="table-container">
           <TableContainer component={Paper}>
             <Table>
@@ -159,4 +166,4 @@ class Onderwijsontwerp extends React.Component {
   }
 }
 
-export default Onderwijsontwerp;
+export default Index;

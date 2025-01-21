@@ -12,7 +12,7 @@ def startup():
         Term_name TEXT NOT NULL,
         Term_levelStart INTEGER NOT NULL,
         Term_levelEnd INTEGER NOT NULL,
-        Term_perspective TEXT CHECK(Term_perspective IN ('Onderwijsontwerp', 'Samenstellingonderbouwing', 'Doelstelling', 'Onderwijsontwerpvolgorde', 'Benodigdheden', 'Aanbod', 'Startperiode')),
+        Term_perspective TEXT CHECK(Term_perspective IN ('Onderwijsontwerp', 'Samenstellingonderbouwing', 'Doelstelling', 'Onderwijsontwerpvolgorde', 'Benodigdheid', 'Aanbod', 'Startperiode')),
         Term_Definition INTEGER,
         FOREIGN KEY (Term_Definition) REFERENCES DEFINITION (Definition_ID)
     );
@@ -49,7 +49,7 @@ def startup():
  cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Minorcursusprogramma', 6, 6, 'Onderwijsontwerpvolgorde');")
  cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Cursusplanning', 4, 4, 'Onderwijsontwerpvolgorde');")
  cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetsactiviteitonderdeel-volgorde', 2, 2, 'Onderwijsontwerpvolgorde');")
- cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetsmaterialen', 1, 2, 'Benodigdheden');")
+ cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Toetsmaterialen', 1, 2, 'Benodigdheid');")
  cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Opleiding', 7, 7, 'Aanbod');")
  cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Minor', 6, 6, 'Aanbod');")
  cursor.execute("INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_perspective) VALUES ('Cursus', 4, 4, 'Aanbod');")
@@ -60,13 +60,11 @@ def startup():
 
 
  cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 2)')
- cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 24)')
- cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 5)')
- cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 19)')
- cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 14)')
  cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 10)')
- cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 11)')
- 
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 9)')
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 23)')
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (1, 13)')
+ cursor.execute('INSERT INTO DEFINITION (Term1_ID, Term2_ID) VALUES (2, 25)')
 
  conn.commit()
 
@@ -100,7 +98,8 @@ def get_onderwijsontwerpdata():
         if term2_id is not None:
             terms_dict[term1_id]['Related_Terms'].append({
                 'Term2_ID': term2_id,
-                'Term2_Name': term2_name
+                'Term2_Name': term2_name,
+                'Term2_perspective': term2_perspective
             })
         if definition_id is not None:
             terms_dict[term1_id]['Definition_IDs'].append(term2_id)
