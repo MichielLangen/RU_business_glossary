@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { OnderwijsontwerpSjabloon } from "../../Constants/Onderwijsontwerp";
 import { fillTemplate } from "../../Constants/Onderwijsontwerp";
 import { buildSentence } from "../../Constants/sentenceBuilder";
-import { generateMermaidString } from "../../Constants/mermaidStringBuilder";
+import visualisatie from "../images/CDM_visualisatie.png";
 
 class DataVisualisation extends Component {
   constructor(props) {
@@ -42,8 +42,14 @@ class DataVisualisation extends Component {
     const { data } = this.state;
 
     let filledTemplates = data.map((record) => {
-      let templateCopy = JSON.parse(JSON.stringify(OnderwijsontwerpSjabloon)); // Create a fresh copy of the template for each record
-      return fillTemplate(templateCopy, record);
+      if (record.Term_Perspective_Name === "Onderwijsontwerp") {
+        let templateCopy = JSON.parse(JSON.stringify(OnderwijsontwerpSjabloon)); // Create a fresh copy of the template for each record
+        return fillTemplate(templateCopy, record);
+      }
+    });
+
+    filledTemplates = filledTemplates.filter(function (element) {
+      return element !== undefined;
     });
 
     return (
@@ -75,12 +81,53 @@ class DataVisualisation extends Component {
                 {this.state.shownData["Onderwijsontwerp"]}
               </h1>
               <div style={{ width: "900px", textAlign: "left" }}>
-                <p>{buildSentence("Onderwijsontwerp", this.state.shownData)}</p>
+                <p>
+                  {buildSentence(
+                    "Onderwijsontwerp",
+
+                    data.find(
+                      (item) =>
+                        item.Term_name ===
+                        this.state.shownData["Onderwijsontwerp"][0]
+                    )
+                  )}
+                </p>
               </div>
               <div>
-                <pre style={{ textAlign: "left" }}>
-                  {JSON.stringify(this.state.shownData, null, 2)}
-                </pre>
+                <div className="article">
+                  <img className="picture" src={visualisatie} />
+                  <p className="cdm_onderwijsontwerp">
+                    {this.state.shownData["Onderwijsontwerp"]}
+                  </p>
+                  <p className="cdm_subOnderwijsontwerp">
+                    {this.state.shownData["subOnderwijsontwerp"]}
+                  </p>
+                  <p className="cdm_kwaliteitskader">
+                    {this.state.shownData["Kwaliteitskader"]}
+                  </p>
+                  <p className="cdm_samenstellingskader">
+                    {this.state.shownData["Samenstellingskader"]}
+                  </p>
+                  <p className="cdm_aanbod">{this.state.shownData["Aanbod"]}</p>
+                  <p className="cdm_uitvoering">
+                    {this.state.shownData["Uitvoering"]}
+                  </p>
+                  <p className="cdm_samensteller">
+                    {this.state.shownData["Samensteller"]}
+                  </p>
+                  <p className="cdm_onderwijsontwerp_volgorde">
+                    {this.state.shownData["Onderwijsontwerpvolgorde"]}
+                  </p>
+                  <p className="cdm_doelstelling">
+                    {this.state.shownData["Doelstelling"]}
+                  </p>
+                  <p className="cdm_toelatingseis">
+                    {this.state.shownData["Toelatingseis"]}
+                  </p>
+                  <p className="cdm_samenstellingsonderbouwing">
+                    {this.state.shownData["Samenstellingsonderbouwing"]}
+                  </p>
+                </div>
               </div>
             </div>
           ) : (

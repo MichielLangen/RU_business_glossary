@@ -10,6 +10,7 @@ function App() {
     <div className="App">
       <Navbar />
       <Routes>
+        <Route path="/" element={<Homepage />} />
         <Route path="/Home" element={<Homepage />} />
         <Route path="/Woordenboek" element={<Index />} />
         <Route path="/CDM" element={<DataVisualisation />} />

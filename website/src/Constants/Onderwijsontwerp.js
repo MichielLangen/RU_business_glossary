@@ -6,7 +6,7 @@ export let OnderwijsontwerpSjabloon = {
   Aanbod: [],
   Uitvoering: [],
   Samensteller: [],
-  Onderwijsontwerp_volgorde: [],
+  Onderwijsontwerpvolgorde: [],
   Doelstelling: [],
   Toelatingseis: [],
   Samenstellingsonderbouwing: [],
@@ -23,17 +23,19 @@ const perspectiveToField = {
   Uitvoering: "Uitvoering",
   Toelatingseis: "Toelatingseis",
   Samensteller: "Samensteller",
-  Onderwijsontwerp_volgorde: "Onderwijsontwerp_volgorde",
+  Onderwijsontwerpvolgorde: "Onderwijsontwerpvolgorde",
 };
 
 export function fillTemplate(template, record) {
-  // Loop through all terms in Related_Terms and add them to the corresponding fields
-  record.Related_Terms.forEach((term) => {
-    const field = perspectiveToField[term.Term2_perspective];
+  record.DefinitionTerm.forEach((term) => {
+    const field = perspectiveToField[term.RelationshipType_ToPerspective];
     if (field) {
-      template[field].push(term.Term2_Name);
+      template[field].push(term.subTerm_name);
     } else {
-      console.log("Unhandled perspective:", term.Term2_perspective);
+      console.log(
+        "Unhandled perspective:",
+        term.RelationshipType_ToPerspective
+      );
     }
   });
 
@@ -46,6 +48,5 @@ export function fillTemplate(template, record) {
   }
 
   template["Onderwijsontwerp"] = [record.Term_name];
-
   return template;
 }

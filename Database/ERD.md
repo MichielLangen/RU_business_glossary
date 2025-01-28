@@ -3,20 +3,34 @@
 title: Term ERD
 ---
 erDiagram
-    TERM }o--o{ DEFINITION : lists
     TERM {
         int Term_ID PK
         string Term_name
         int Term_levelStart
         int Term_levelEnd
-        enum Term_perspective
-        int Term_Definition FK
+        int Term_Perspective FK
     }
-    DEFINITION ||--|| TERM : has
-    DEFINITION{
-        int Definition_ID PK
-        int Definition_component FK
+    DEFINITIONTERM{
+        int DefinitionTerm_ID PK
+        int MainTerm_ID FK
+        int subTerm_ID FK
+        int Relationshiptype_ID FK
     }
-```
+    PERSPECTIVE{
+        int Perspective_ID PK
+        string Perspective_name
+    }
+    RELATIONSHIPTYPE{
+        int RelationshipType_ID PK
+        string RelationshipType_name
+        int RelationshipType_fromPerspective FK
+        int RelationshipType_toPerspective FK
+    }
 
-Een curriculum is een ontwerp van een Opleiding, Samengesteld door een onderwijsvertegenwoordiger, Waarvan de subOnderwijsontwerpen staan in een Cursusontwerp-volgorde, Gericht op de realisatie van één of meerdere Eindkwalificatie, Met één of meerdere Opleidingstoelatingseisen, Waarvan de samenstelling is onderbouwd door één of meerdere Leerlijn of
+    TERM ||--o{ DEFINITIONTERM : is_part_of
+    RELATIONSHIPTYPE ||--o{ DEFINITIONTERM : has
+    TERM ||--|| PERSPECTIVE : has
+    RELATIONSHIPTYPE ||--|| PERSPECTIVE : has_from
+    RELATIONSHIPTYPE ||--|| PERSPECTIVE : has_to
+
+```

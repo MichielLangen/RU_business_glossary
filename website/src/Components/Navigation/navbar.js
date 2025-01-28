@@ -56,9 +56,9 @@ function ResponsiveAppBar() {
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
-                fontFamily: "monospace",
+                fontFamily: "roboto",
                 fontWeight: 700,
-                letterSpacing: ".3rem",
+                letterSpacing: ".0rem",
                 color: "inherit",
                 textDecoration: "none",
               }}
@@ -102,7 +102,6 @@ function ResponsiveAppBar() {
                 ))}
               </Menu>
             </Box>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button

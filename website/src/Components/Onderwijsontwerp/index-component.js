@@ -23,6 +23,7 @@ class Index extends React.Component {
     fetch("http://127.0.0.1:5000/onderwijsontwerp")
       .then((res) => res.json()) // Correcte syntax voor json() parsing
       .then((res) => {
+        console.log(res);
         this.setState({ data: res }); // Update state met de opgehaalde data
       })
       .catch((error) => {
@@ -38,7 +39,7 @@ class Index extends React.Component {
     const { data } = this.state;
     const headers = ["Term_name"];
     const perspectives = [
-      ...new Set(data.map((term) => term.Term_perspective)),
+      ...new Set(data.map((term) => term.Term_Perspective_Name)),
     ];
 
     const minLevel = Math.min(...data.map((term) => term.Term_levelStart));
@@ -47,11 +48,6 @@ class Index extends React.Component {
       { length: maxLevel - minLevel + 1 },
       (_, i) => minLevel + i
     ).reverse();
-
-    let filledTemplates = data.map((record) => {
-      let templateCopy = JSON.parse(JSON.stringify(OnderwijsontwerpSjabloon)); // Create a fresh copy of the template for each record
-      return fillTemplate(templateCopy, record);
-    });
 
     const rows = [];
 
@@ -62,7 +58,7 @@ class Index extends React.Component {
         // Find terms that match this level and perspective
         const termsAtLevel = data.filter(
           (term) =>
-            term.Term_perspective === perspective &&
+            term.Term_Perspective_Name === perspective &&
             term.Term_levelStart <= level &&
             term.Term_levelEnd >= level
         );
@@ -145,10 +141,10 @@ class Index extends React.Component {
                     ))}
                     {/* Render related terms in a new column */}
                     <TableCell>
-                      {row.Related_Terms && row.Related_Terms.length > 0 ? (
+                      {row.DefinitionTerm && row.DefinitionTerm.length > 0 ? (
                         <ul>
-                          {row.Related_Terms.map((relatedTerm, index) => (
-                            <li key={index}>{relatedTerm.Term2_Name}</li>
+                          {row.DefinitionTerm.map((relatedTerm, index) => (
+                            <li key={index}>{relatedTerm.subTerm_name}</li>
                           ))}
                         </ul>
                       ) : (

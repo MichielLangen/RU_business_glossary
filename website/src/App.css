@@ -81,3 +81,155 @@ th {
   display: flex;
   flex-direction: row;
 }
+
+/* CSS for text over image */
+.article {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.picture {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.cdm_onderwijsontwerp {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 4%;
+  left: 0;
+  right: 43%;
+  height: fit-content;
+  margin: auto;
+}
+
+.cdm_subOnderwijsontwerp {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 58%;
+  bottom: 0;
+  left: 0;
+  right: 43%;
+  height: fit-content;
+  margin: auto;
+}
+
+.cdm_kwaliteitskader {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 72%;
+  left: 0;
+  right: 23%;
+  height: fit-content;
+  margin: auto;
+}
+
+.cdm_samenstellingskader {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 72%;
+  left: 0;
+  right: 73%;
+  height: fit-content;
+  margin: auto;
+}
+
+.cdm_aanbod {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 76%;
+  left: 69%;
+  right: 0;
+  height: fit-content;
+  margin: auto;
+}
+
+.cdm_uitvoering {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 70%;
+  left: 69%;
+  right: 0;
+  height: fit-content;
+  margin: auto;
+}
+
+.cdm_samensteller {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 47%;
+  left: 69%;
+  right: 0;
+  height: fit-content;
+  margin: auto;
+}
+.cdm_onderwijsontwerp_volgorde {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  bottom: 15%;
+  left: 69%;
+  right: 0;
+  height: fit-content;
+  margin: auto;
+}
+.cdm_doelstelling {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 13%;
+  bottom: 0;
+  left: 69%;
+  right: 0;
+  height: fit-content;
+  margin: auto;
+}
+.cdm_toelatingseis {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 43%;
+  bottom: 0;
+  left: 69%;
+  right: 0;
+  height: fit-content;
+  margin: auto;
+}
+.cdm_samenstellingsonderbouwing {
+  font-size: 16px;
+  color: black;
+  text-align: center;
+  position: absolute;
+  top: 70%;
+  bottom: 0;
+  left: 69%;
+  right: 0;
+  height: fit-content;
+  margin: auto;
+}
