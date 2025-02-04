@@ -40,12 +40,12 @@ class DataVisualisation extends Component {
 
   render() {
     const { data } = this.state;
-
     let filledTemplates = data.map((record) => {
       if (record.Term_Perspective_Name === "Onderwijsontwerp") {
         let templateCopy = JSON.parse(JSON.stringify(OnderwijsontwerpSjabloon)); // Create a fresh copy of the template for each record
         return fillTemplate(templateCopy, record);
       }
+      return [];
     });
 
     filledTemplates = filledTemplates.filter(function (element) {
@@ -63,11 +63,42 @@ class DataVisualisation extends Component {
             height: "800px",
           }}
         >
+          <h4>Onderwijsontwerpen</h4>
           {filledTemplates.map((record, index) => {
             return (
               <li key={index}>
                 <p onClick={() => this.setState({ shownData: record })}>
                   {record["Onderwijsontwerp"]}
+                </p>
+              </li>
+            );
+          })}
+          <h4>Aanboden</h4>
+          {filledTemplates.map((record, index) => {
+            return (
+              <li key={index}>
+                <p onClick={() => this.setState({ shownData: record })}>
+                  {record["Aanbod"]}
+                </p>
+              </li>
+            );
+          })}
+          <h4>Programmas</h4>
+          {filledTemplates.map((record, index) => {
+            return (
+              <li key={index}>
+                <p onClick={() => this.setState({ shownData: record })}>
+                  {record["Onderwijsontwerpvolgorde"]}
+                </p>
+              </li>
+            );
+          })}
+          <h4>Samenstellingsonderbouwing</h4>
+          {filledTemplates.map((record, index) => {
+            return (
+              <li key={index}>
+                <p onClick={() => this.setState({ shownData: record })}>
+                  {record["Samenstellingsonderbouwing"]}
                 </p>
               </li>
             );
@@ -95,7 +126,11 @@ class DataVisualisation extends Component {
               </div>
               <div>
                 <div className="article">
-                  <img className="picture" src={visualisatie} />
+                  <img
+                    className="picture"
+                    src={visualisatie}
+                    alt="Visual representation of the CDM"
+                  />
                   <p className="cdm_onderwijsontwerp">
                     {this.state.shownData["Onderwijsontwerp"]}
                   </p>
