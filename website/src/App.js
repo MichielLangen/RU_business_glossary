@@ -4,6 +4,7 @@ import Navbar from "./Components/Navigation/navbar";
 import Index from "./Components/Onderwijsontwerp/index-component";
 import DataVisualisation from "./Components/CDM/cdm";
 import Homepage from "./Components/Homepage";
+import AdminPanel from "./Components/Admin/admin";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/Home" element={<Homepage />} />
         <Route path="/Woordenboek" element={<Index />} />
         <Route path="/CDM" element={<DataVisualisation />} />
+        <Route path="/Manage" element={<AdminPanel />} />
       </Routes>
     </div>
   );

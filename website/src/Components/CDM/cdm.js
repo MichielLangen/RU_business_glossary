@@ -3,6 +3,7 @@ import { OnderwijsontwerpSjabloon } from "../../Constants/Onderwijsontwerp";
 import { fillTemplate } from "../../Constants/Onderwijsontwerp";
 import { buildSentence } from "../../Constants/sentenceBuilder";
 import visualisatie from "../images/CDM_visualisatie.png";
+import Sidebar from "./sidebar/sidebar";
 
 class DataVisualisation extends Component {
   constructor(props) {
@@ -30,6 +31,10 @@ class DataVisualisation extends Component {
       });
   };
 
+  handleStateChangeFromChild = (data) => {
+    this.setState({ shownData: data });
+  };
+
   componentDidMount() {
     this.fetchData();
   }
@@ -54,56 +59,10 @@ class DataVisualisation extends Component {
 
     return (
       <div className="rowC">
-        <ol
-          style={{
-            listStyle: "none",
-            width: "250px",
-            textAlign: "left",
-            overflowY: "scroll",
-            height: "800px",
-          }}
-        >
-          <h4>Onderwijsontwerpen</h4>
-          {filledTemplates.map((record, index) => {
-            return (
-              <li key={index}>
-                <p onClick={() => this.setState({ shownData: record })}>
-                  {record["Onderwijsontwerp"]}
-                </p>
-              </li>
-            );
-          })}
-          <h4>Aanboden</h4>
-          {filledTemplates.map((record, index) => {
-            return (
-              <li key={index}>
-                <p onClick={() => this.setState({ shownData: record })}>
-                  {record["Aanbod"]}
-                </p>
-              </li>
-            );
-          })}
-          <h4>Programmas</h4>
-          {filledTemplates.map((record, index) => {
-            return (
-              <li key={index}>
-                <p onClick={() => this.setState({ shownData: record })}>
-                  {record["Onderwijsontwerpvolgorde"]}
-                </p>
-              </li>
-            );
-          })}
-          <h4>Samenstellingsonderbouwing</h4>
-          {filledTemplates.map((record, index) => {
-            return (
-              <li key={index}>
-                <p onClick={() => this.setState({ shownData: record })}>
-                  {record["Samenstellingsonderbouwing"]}
-                </p>
-              </li>
-            );
-          })}
-        </ol>
+        <Sidebar
+          handler={this.handleStateChangeFromChild}
+          template={filledTemplates}
+        />
         <div className="vl"></div>
         <div style={{ marginLeft: "40px" }}>
           {this.state.shownData["Onderwijsontwerp"] ? (

@@ -106,4 +106,142 @@ def get_onderwijsontwerpdata():
         print(f"Error during data fetching or formatting: {e}")
         return None
     
+def get_admin():
+    connection = connect_to_sql_server()
+    if not connection:
+        return None   
     
+    query_perspective = "SELECT * FROM PERSPECTIVE"
+    query_relationshiptype = "SELECT * FROM RELATIONSHIPTYPE"
+    query_term = "SELECT * FROM TERM"
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute(query_perspective)
+        rows = cursor.fetchall()
+
+        perspective_dict = {}
+
+        for row in rows:
+            pers_id = row.Perspective_ID
+            pers_name = row.Perspective_name
+
+            if pers_id not in perspective_dict:
+                perspective_dict[pers_id] = {
+                    'Perspective_ID': pers_id,
+                    'Perspective_name': pers_name
+                }
+
+        cursor.execute(query_relationshiptype)
+        rows = cursor.fetchall()
+
+        relationshiptype_dict = {}
+
+        for row in rows:
+            rel_id = row.RelationshipType_ID
+
+            if rel_id not in relationshiptype_dict:
+                relationshiptype_dict[rel_id] = {
+                    'rel_ID': rel_id,
+                    'rel_text': row.RelationshipType_name,
+                    'toPerspective': row.RelationshipType_toPerspective,
+                    'fromPerspective': row.RelationshipType_fromPerspective
+                }
+
+        cursor.execute(query_term)
+        rows = cursor.fetchall()
+
+        term_dict = {}
+
+        for row in rows:
+            term_id = row.Term_ID
+
+            if term_id not in term_dict:
+                term_dict[term_id] = {
+                    'term_ID': term_id,
+                    'term_name': row.Term_name,
+                    'levelStart': row.Term_levelStart,
+                    'levelEnd': row.Term_levelEnd,
+                    'term_perspective': row.Term_Perspective,
+                }
+
+
+        # Close the connection
+        connection.close()
+
+        return [perspective_dict, relationshiptype_dict, term_dict]
+
+    except Exception as e:
+        print(f"Error during data fetching or formatting: {e}")
+        return None
+
+def insert_term_and_definitionterm(term_params, definitionterm_list):
+    """
+    Inserts a new term and a related definitionterm record into the database in a single transaction.
+    
+    Parameters:
+        term_params (dict): A dictionary with keys:
+            - Term_ID (int)
+            - Term_name (str)
+            - Term_levelStart (int)
+            - Term_levelEnd (int)
+            - Term_Perspective (int)
+        definitionterm_list (list of dict): A list of dictionaries where each dictionary has keys:
+            - DefinitionTerm_ID (int)
+            - MainTerm_ID (int)  (should match term_params['Term_ID'])
+            - subTerm_ID (int)
+            - Relationshiptype_ID (int)
+    
+    Returns:
+        bool: True if both insertions succeed, False otherwise.
+    """
+    connection = connect_to_sql_server()
+    if not connection:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        # Start transaction (pyodbc automatically starts a transaction)
+        
+        # 1. Insert into TERM table
+        insert_term_query = """
+            INSERT INTO TERM (Term_name, Term_levelStart, Term_levelEnd, Term_Perspective)
+            VALUES (?, ?, ?, ?)
+        """
+        cursor.execute(insert_term_query,  
+                       term_params['Term_name'], 
+                       term_params['Term_levelStart'], 
+                       term_params['Term_levelEnd'], 
+                       term_params['Term_Perspective'])
+        
+        # Retrieve the newly generated Term_ID using SCOPE_IDENTITY()
+        cursor.execute("SELECT Term_ID FROM TERM WHERE Term_name=?", term_params['Term_name'])
+        row = cursor.fetchone()
+        if row is None or row[0] is None:
+            raise Exception("Failed to retrieve the new Term_ID.")
+        main_term_id = int(row[0])
+        print(main_term_id)
+        
+        insert_definitionterm_query = """
+            INSERT INTO DEFINITIONTERM (MainTerm_ID, subTerm_ID, Relationshiptype_ID)
+            VALUES (?, ?, ?)
+        """
+        
+        for dt in definitionterm_list:       
+            cursor.execute(insert_definitionterm_query, 
+                        main_term_id, 
+                        dt['subTerm_ID'], 
+                        dt['Relationshiptype_ID'])
+
+        # If all operations are successful, commit the transaction.
+        connection.commit()
+        print("New term and its definitionterm record inserted successfully.")
+        return True
+
+    except Exception as e:
+        connection.rollback()
+        print("Error during insertion:", e)
+        return False
+
+    finally:
+        connection.close()
