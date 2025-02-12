@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 import databasehandler
+import definitionLogic
 
 app = Flask(__name__)
 CORS(app)
@@ -20,7 +21,9 @@ def get_Admin():
 @app.route('/admin', methods=['POST'])
 def post_Term():
    data = request.get_json()
-   databasehandler.insert_term_and_definitionterm(data[0], data[1])
+   term_params = data[0]
+   definitionterm_list = definitionLogic.getCorrectPerspective(term_params["Term_Perspective"], data[1])
+   databasehandler.insert_term_and_definitionterm(data[0], definitionterm_list)
    return 'ok'
 
 if __name__ == '__main__':

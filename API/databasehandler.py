@@ -220,7 +220,6 @@ def insert_term_and_definitionterm(term_params, definitionterm_list):
         if row is None or row[0] is None:
             raise Exception("Failed to retrieve the new Term_ID.")
         main_term_id = int(row[0])
-        print(main_term_id)
         
         insert_definitionterm_query = """
             INSERT INTO DEFINITIONTERM (MainTerm_ID, subTerm_ID, Relationshiptype_ID)
@@ -243,5 +242,57 @@ def insert_term_and_definitionterm(term_params, definitionterm_list):
         print("Error during insertion:", e)
         return False
 
+    finally:
+        connection.close()
+
+def getPerspectiveList(toPers, fromPers):
+    connection = connect_to_sql_server()
+    if not connection:
+        return False
+    
+    try:
+        cursor = connection.cursor()
+        query = """ SELECT * FROM RELATIONSHIPTYPE WHERE  RelationshipType_fromPerspective = ? AND RelationshipType_toPerspective = ?"""
+
+        cursor.execute(query, fromPers, toPers)
+        row = cursor.fetchone()
+
+        if row is None or row[0] is None:
+            raise Exception("Failed to retrieve the new Term_ID.")
+        perspective_id = int(row[0])
+
+        return perspective_id
+
+    except Exception as e:
+        connection.rollback()
+        print("Error during insertion:", e)
+        return False
+    
+    finally:
+        connection.close()
+
+def getPerspectiveID(term_id):
+    connection = connect_to_sql_server()
+    if not connection:
+        return False
+    
+    try:
+        cursor = connection.cursor()
+        query = """ SELECT Term_Perspective FROM TERM WHERE Term_ID = ?"""
+
+        cursor.execute(query, term_id)
+        row = cursor.fetchone()
+
+        if row is None or row[0] is None:
+            raise Exception("Failed to retrieve the new Term_ID.")
+        perspective_id = int(row[0])
+
+        return perspective_id
+
+    except Exception as e:
+        connection.rollback()
+        print("Error during insertion:", e)
+        return False
+    
     finally:
         connection.close()

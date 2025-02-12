@@ -1,14 +1,16 @@
 import React, { Component } from "react";
-import { TextField, Button, FormControl } from "@mui/material";
-import { NumberField } from "@base-ui-components/react/number-field";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 
 class AdminPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
+      termCount: 0,
+      termName: "",
+      startLevel: 1,
+      endLevel: 1,
+      subTerm: [],
+      termPerspective: 1,
     };
   }
 
@@ -23,67 +25,137 @@ class AdminPanel extends Component {
       });
   };
 
+  postData = () => {
+    fetch("http://127.0.0.1:5000/admin", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify([
+        {
+          Term_name: this.state.termName,
+          Term_levelStart: Number(this.state.startLevel),
+          Term_levelEnd: Number(this.state.endLevel),
+          Term_Perspective: Number(this.state.termPerspective),
+        },
+        this.state.subTerm,
+      ]),
+    });
+  };
+
   componentDidMount() {
     this.fetchData();
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(event.target.value);
+    this.postData();
   }
+
+  handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState((values) => ({ ...values, [name]: value }));
+  };
+
+  handleSubChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({
+      subTerm: [...this.state.subTerm, Number(value)],
+    });
+  };
+
+  increaseCounter = (type) => {
+    this.setState((prevState) => {
+      return {
+        termCount:
+          type == "add" ? prevState.termCount + 1 : prevState.termCount - 1,
+      };
+    });
+  };
+
   render() {
-    console.log(this.state.data[0]);
     return (
       <div>
         <br />
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit.bind(this)}>
           {this.state.data[0] != undefined ? (
             <div>
-              <TextField label="Term naam" name="term_name" />
-              <NumberField.Root>
-                <NumberField.ScrubArea>
-                  <label>Level start</label>
-                  <NumberField.ScrubAreaCursor />
-                </NumberField.ScrubArea>
-                <NumberField.Group>
-                  <NumberField.Decrement>-</NumberField.Decrement>
-                  <NumberField.Input />
-                  <NumberField.Increment>+</NumberField.Increment>
-                </NumberField.Group>
-              </NumberField.Root>
-              <NumberField.Root>
-                <NumberField.ScrubArea>
-                  <label>Level eind</label>
-                  <NumberField.ScrubAreaCursor />
-                </NumberField.ScrubArea>
-                <NumberField.Group>
-                  <NumberField.Decrement>-</NumberField.Decrement>
-                  <NumberField.Input />
-                  <NumberField.Increment>+</NumberField.Increment>
-                </NumberField.Group>
-              </NumberField.Root>
+              <label>
+                Term naam:
+                <input
+                  style={{ marginLeft: "10px" }}
+                  type="text"
+                  name="termName"
+                  value={this.state.termName}
+                  onChange={this.handleChange.bind(this)}
+                />
+              </label>
               <br />
-              <Select
-                style={{ width: "200px" }}
-                label="Perspectief"
-                id="perspective selector"
-              >
-                {Object.values(this.state.data[0]).map((element) => (
-                  <MenuItem
-                    key={element.Perspective_ID}
-                    value={element.Perspective_ID}
-                  >
-                    {element.Perspective_name}
-                  </MenuItem>
+              <label>
+                Begin niveau:
+                <input
+                  style={{ marginLeft: "10px" }}
+                  type="number"
+                  name="startLevel"
+                  value={this.state.startLevel}
+                  onChange={this.handleChange.bind(this)}
+                />
+              </label>
+              <br />
+              <label>
+                Eind niveau:
+                <input
+                  style={{ marginLeft: "10px" }}
+                  type="number"
+                  name="endLevel"
+                  value={this.state.endLevel}
+                  onChange={this.handleChange.bind(this)}
+                />
+              </label>
+              <br />
+              <label>
+                Perspectief:
+                <select
+                  onChange={this.handleChange.bind(this)}
+                  name="termPerspective"
+                  style={{ marginLeft: "10px" }}
+                >
+                  {Object.values(this.state.data[0]).map((element) => (
+                    <option value={element.Perspective_ID}>
+                      {element.Perspective_name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div>
+                <h4>Gerelateerde termen</h4>
+                <input
+                  type="button"
+                  value="+"
+                  onClick={this.increaseCounter.bind(this, "add")}
+                />
+                <input
+                  type="button"
+                  value="-"
+                  onClick={this.increaseCounter.bind(this, "sub")}
+                />
+                {[...Array(this.state.termCount)].map((_, i) => (
+                  <div>
+                    <select name="subTerm" onChange={this.handleSubChange}>
+                      {Object.values(this.state.data[2]).map((element) => (
+                        <option value={element.term_ID}>
+                          {element.term_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 ))}
-              </Select>
-
-              <div></div>
-
+              </div>
               <br />
-              <Button type="submit" variant="contained" color="primary">
-                Voeg toe
-              </Button>
+              <input type="submit" value="Toevoegen" />
             </div>
           ) : (
             <div>Data aan het ophalen...</div>

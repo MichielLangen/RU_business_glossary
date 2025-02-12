@@ -82,6 +82,13 @@ th {
   flex-direction: row;
 }
 
+.rowD {
+  display: flex;
+  flex-direction: row;
+  padding-left: 44%;
+  padding-top: 20px;
+}
+
 /* CSS for text over image */
 .article {
   height: 100%;
