@@ -21,6 +21,7 @@ def get_Admin():
 @app.route('/admin', methods=['POST'])
 def post_Term():
    data = request.get_json()
+   print(data)
    term_params = data[0]
    definitionterm_list = definitionLogic.getCorrectPerspective(term_params["Term_Perspective"], data[1])
    databasehandler.insert_term_and_definitionterm(data[0], definitionterm_list)

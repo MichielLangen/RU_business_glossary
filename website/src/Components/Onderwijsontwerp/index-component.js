@@ -118,45 +118,6 @@ class Index extends React.Component {
             </Table>
           </TableContainer>
         </div>
-        <br />
-        <div className="table-container">
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {/* Dynamically create headers from `headers` array */}
-                  {headers.map((header, index) => (
-                    <TableCell key={index}>{header}</TableCell>
-                  ))}
-                  <TableCell>Related Terms</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {/* Map over the rows of the data */}
-                {data.map((row, rowIndex) => (
-                  <TableRow key={rowIndex}>
-                    {/* Map over each header and render corresponding data */}
-                    {headers.map((header, colIndex) => (
-                      <TableCell key={colIndex}>{row[header]}</TableCell>
-                    ))}
-                    {/* Render related terms in a new column */}
-                    <TableCell>
-                      {row.DefinitionTerm && row.DefinitionTerm.length > 0 ? (
-                        <ul>
-                          {row.DefinitionTerm.map((relatedTerm, index) => (
-                            <li key={index}>{relatedTerm.subTerm_name}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <p>No related terms</p>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
       </div>
     );
   }
