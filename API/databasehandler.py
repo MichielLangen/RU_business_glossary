@@ -20,6 +20,34 @@ def connect_to_sql_server():
         return None
 
 def get_onderwijsontwerpdata():
+    """
+    Retrieves and organizes educational design data from the database.
+
+    This function fetches terms and their related definitions, perspectives, 
+    and relationship types by joining multiple tables. The results are structured 
+    into a dictionary to group definitions under their respective main terms.
+
+    Returns:
+        list: A list of dictionaries, where each dictionary represents a term with the following structure:
+            - Term_ID (int): Unique identifier of the term.
+            - Term_name (str): Name of the term.
+            - Term_levelStart (int): Starting level of the term.
+            - Term_levelEnd (int): Ending level of the term.
+            - Term_Perspective (int): Perspective ID associated with the term.
+            - Term_Perspective_Name (str): Name of the associated perspective.
+            - DefinitionTerm (list of dict): A list of related definitions, where each definition contains:
+                - DefinitionTerm_ID (int): Unique identifier for the definition.
+                - MainTerm_ID (int): ID of the main term.
+                - MainTerm_name (str): Name of the main term.
+                - subTerm_ID (int): ID of the related sub-term.
+                - subTerm_name (str): Name of the related sub-term.
+                - Relationshiptype_ID (int): ID of the relationship type.
+                - RelationshipType_name (str): Name of the relationship type.
+                - RelationshipType_FromPerspective (str): Perspective from which the relationship originates.
+                - RelationshipType_ToPerspective (str): Perspective to which the relationship points.
+
+    Returns None if an error occurs during database retrieval or processing.
+    """
     # Connect to MSSQL
     connection = connect_to_sql_server()
     if not connection:
@@ -106,22 +134,56 @@ def get_onderwijsontwerpdata():
         print(f"Error during data fetching or formatting: {e}")
         return None
     
+    finally:
+        if connection:
+            connection.close()
+
+    
 def get_admin():
+    """
+    Retrieves and organizes data from the database related to perspectives, relationship types, and terms.
+
+    This function fetches data from three tables: PERSPECTIVE, RELATIONSHIPTYPE, and TERM. 
+    The results are structured into dictionaries for easy access.
+
+    Returns:
+        list: A list containing three dictionaries:
+            - perspective_dict (dict): A dictionary where each key is a Perspective_ID, and the value is a dictionary with:
+                - Perspective_ID (int)
+                - Perspective_name (str)
+            - relationshiptype_dict (dict): A dictionary where each key is a RelationshipType_ID, and the value is a dictionary with:
+                - rel_ID (int)
+                - rel_text (str)
+                - toPerspective (int)
+                - fromPerspective (int)
+            - term_dict (dict): A dictionary where each key is a Term_ID, and the value is a dictionary with:
+                - term_ID (int)
+                - term_name (str)
+                - levelStart (int)
+                - levelEnd (int)
+                - term_perspective (int)
+
+    Returns None if an error occurs during database retrieval or processing.
+    """
+    # Connect to database
     connection = connect_to_sql_server()
     if not connection:
         return None   
     
+    # Queries to retrieve neccessary data
     query_perspective = "SELECT * FROM PERSPECTIVE"
     query_relationshiptype = "SELECT * FROM RELATIONSHIPTYPE"
     query_term = "SELECT * FROM TERM"
 
     try:
+        # Execute perspective query and fetch data
         cursor = connection.cursor()
         cursor.execute(query_perspective)
         rows = cursor.fetchall()
 
         perspective_dict = {}
 
+        # Form data in dict
         for row in rows:
             pers_id = row.Perspective_ID
             pers_name = row.Perspective_name
@@ -132,11 +194,13 @@ def get_admin():
                     'Perspective_name': pers_name
                 }
 
+        # Execute relationshiptype query and fetch data
         cursor.execute(query_relationshiptype)
         rows = cursor.fetchall()
 
         relationshiptype_dict = {}
 
+        # Form data in dict
         for row in rows:
             rel_id = row.RelationshipType_ID
 
@@ -148,11 +212,13 @@ def get_admin():
                     'fromPerspective': row.RelationshipType_fromPerspective
                 }
 
+        # Execute term query and fetch data
         cursor.execute(query_term)
         rows = cursor.fetchall()
 
         term_dict = {}
 
+        # Form data in dict
         for row in rows:
             term_id = row.Term_ID
 
@@ -169,11 +235,17 @@ def get_admin():
         # Close the connection
         connection.close()
 
+        # Return data as an array
         return [perspective_dict, relationshiptype_dict, term_dict]
 
     except Exception as e:
         print(f"Error during data fetching or formatting: {e}")
         return None
+    
+    finally:
+        if connection:
+            connection.close()
+
 
 def insert_term_and_definitionterm(term_params, definitionterm_list):
     """
@@ -243,9 +315,30 @@ def insert_term_and_definitionterm(term_params, definitionterm_list):
         return False
 
     finally:
-        connection.close()
+        if connection:
+            connection.close()
+
 
 def getPerspectiveList(toPers, fromPers):
+    """
+    Retrieves the RelationshipType_ID based on the given fromPerspective and toPerspective values.
+
+    This function queries the RELATIONSHIPTYPE table to find the relationship type 
+    that connects the specified perspectives.
+
+    Parameters:
+        toPers (int): The ID of the target perspective.
+        fromPers (int): The ID of the source perspective.
+
+    Returns:
+        int: The RelationshipType_ID if found.
+        False: If no matching relationship type is found or an error occurs.
+
+    Exceptions:
+        - If no result is found, an exception is raised with the message:
+          "Failed to retrieve the new Term_ID."
+        - Any other database errors are caught and printed.
+    """
     connection = connect_to_sql_server()
     if not connection:
         return False
@@ -269,9 +362,28 @@ def getPerspectiveList(toPers, fromPers):
         return False
     
     finally:
-        connection.close()
+        if connection:
+            connection.close()
+
 
 def getPerspectiveID(term_id):
+    """
+    Retrieves the Perspective_ID associated with a given Term_ID.
+
+    This function queries the TERM table to find the perspective linked to the specified term.
+
+    Parameters:
+        term_id (int): The ID of the term whose perspective needs to be retrieved.
+
+    Returns:
+        int: The Perspective_ID if found.
+        False: If no matching term is found or an error occurs.
+
+    Exceptions:
+        - If no result is found, an exception is raised with the message:
+          "Failed to retrieve the new Term_ID."
+        - Any other database errors are caught and printed.
+    """
     connection = connect_to_sql_server()
     if not connection:
         return False
@@ -295,4 +407,5 @@ def getPerspectiveID(term_id):
         return False
     
     finally:
-        connection.close()
+        if connection:
+            connection.close()

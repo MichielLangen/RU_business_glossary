@@ -1,4 +1,4 @@
-export function buildSentence(perspective, terms) {
+export function buildSentence(terms) {
   let sentence = "Een ";
   sentence += terms.Term_name;
   sentence += " is een ";

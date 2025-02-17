@@ -34,7 +34,7 @@ De Radboud universiteit is bezig met een project om een harmonische, consistente
    npm i
 
    #installatie van python modules
-   pip install flask, flask_cors
+   pip install flask, flask_cors, pyodbc
 
    ```
 
@@ -90,8 +90,10 @@ erDiagram
 De API bied endpoints voor het beheren en ophalen van termen en definieties. De endpoints zoals die nu bestaan zijn:
 
 - `GET /onderwijsontwerp` - Haalt alle data op van de termen.
+
   - De response van dit enpoint is een lijst van json objecten die er als volgt uit zien:
-    ```
+
+    ```js
     {
         "DefinitionTerm": [],
         "Term_ID": 2,
@@ -102,50 +104,53 @@ De API bied endpoints voor het beheren en ophalen van termen en definieties. De 
         "Term_name": "Leerlijn"
     }
     ```
+
 - `GET /admin` - Haalt de verschillende perspectieven, relaties, en termen op.
+
   - De response van dit endpoint is een lijst van json objecten die er als volgt uit zien:
-    ```
+
+    ```js
     [
-        {
-            "1": {
-                "Perspective_ID": 1,
-                "Perspective_name": "Onderwijsontwerp"
-            },
+      {
+        1: {
+          Perspective_ID: 1,
+          Perspective_name: "Onderwijsontwerp",
         },
-        {
-            "1": {
-                "fromPerspective": 1,
-                "rel_ID": 1,
-                "rel_text": ", is een samenstelling van één of meerdere",
-                "toPerspective": 1
-            },
+      },
+      {
+        1: {
+          fromPerspective: 1,
+          rel_ID: 1,
+          rel_text: ", is een samenstelling van één of meerdere",
+          toPerspective: 1,
         },
-        {
-            "1": {
-                "levelEnd": 7,
-                "levelStart": 7,
-                "term_ID": 1,
-                "term_name": "Curriculum",
-                "term_perspective": 1
-            },
-        }
-    ]
+      },
+      {
+        1: {
+          levelEnd: 7,
+          levelStart: 7,
+          term_ID: 1,
+          term_name: "Curriculum",
+          term_perspective: 1,
+        },
+      },
+    ];
     ```
+
 - `POST /admin` - Voegt een nieuwe term met alle relaties toe.
+
   - Het verwachte json object voor dit endpoint bestaat uit twee delen. Ten eerste de informatie over de nieuwe term zoals term naam, het niveau, en het perspectief. Het tweede gedeelde is een lijst van term_ids van termen die in de definitie staan. Het object ziet er als volgt uit:
-    ```
+
+    ```js
     [
-        {
-            'Term_name': 'New Term',
-            'Term_levelStart': 1,
-            'Term_levelEnd': 1,
-            'Term_Perspective': 1
-        },
-        [
-            2,
-            3
-        ]
-    ]
+      {
+        Term_name: "New Term",
+        Term_levelStart: 1,
+        Term_levelEnd: 1,
+        Term_Perspective: 1,
+      },
+      [2, 3],
+    ];
     ```
 
 ### Webaplicatie

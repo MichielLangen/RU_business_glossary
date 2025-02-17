@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 
 class Homepage extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   render() {
     return (
       <div>
-        <h1>Welkom bij de busisness glossary</h1>
+        <h1>Welkom bij het harmonieuze woordenboek voor het onderwijs</h1>
       </div>
     );
   }

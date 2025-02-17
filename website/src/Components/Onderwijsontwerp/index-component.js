@@ -8,8 +8,6 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { OnderwijsontwerpSjabloon } from "../../Constants/Onderwijsontwerp";
-import { fillTemplate } from "../../Constants/Onderwijsontwerp";
 
 class Index extends React.Component {
   constructor(props) {
@@ -37,7 +35,6 @@ class Index extends React.Component {
 
   render() {
     const { data } = this.state;
-    const headers = ["Term_name"];
     const perspectives = [
       ...new Set(data.map((term) => term.Term_Perspective_Name)),
     ];
